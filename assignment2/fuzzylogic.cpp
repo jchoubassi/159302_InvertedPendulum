@@ -147,9 +147,9 @@ PL: Positive Large
 	  
 	//Rules from Yamakawa
    //Rule 1
-   fl->rules[0+25].inp_fuzzy_set[0] = in_nl;
-   fl->rules[0+25].inp_fuzzy_set[1] = in_nl;
-   fl->rules[0+25].out_fuzzy_set = out_nl;
+   fl->rules[0+25].inp_fuzzy_set[0] = in_nl; // NL positn
+   fl->rules[0+25].inp_fuzzy_set[1] = in_nl; // NL velocity
+   fl->rules[0+25].out_fuzzy_set = out_nl; // NL output and so on...
    //Rule 2
    fl->rules[1+25].inp_fuzzy_set[0] = in_nl;
    fl->rules[1+25].inp_fuzzy_set[1] = in_ns;
@@ -227,25 +227,25 @@ PL: Positive Large
    fl->rules[19+25].inp_fuzzy_set[1] = in_pl;
    fl->rules[19+25].out_fuzzy_set = out_pl;
    //Rule 21
-   fl->rules[19+25].inp_fuzzy_set[0] = in_pl;
-   fl->rules[19+25].inp_fuzzy_set[1] = in_nl;
-   fl->rules[19+25].out_fuzzy_set = out_ps;
+   fl->rules[20+25].inp_fuzzy_set[0] = in_pl;
+   fl->rules[20+25].inp_fuzzy_set[1] = in_nl;
+   fl->rules[20+25].out_fuzzy_set = out_ps;
    //Rule 22
-   fl->rules[19+25].inp_fuzzy_set[0] = in_pl;
-   fl->rules[19+25].inp_fuzzy_set[1] = in_ns;
-   fl->rules[19+25].out_fuzzy_set = out_ps;
+   fl->rules[21+25].inp_fuzzy_set[0] = in_pl;
+   fl->rules[21+25].inp_fuzzy_set[1] = in_ns;
+   fl->rules[21+25].out_fuzzy_set = out_ps;
    //Rule 23
-   fl->rules[19+25].inp_fuzzy_set[0] = in_pl;
-   fl->rules[19+25].inp_fuzzy_set[1] = in_ze;
-   fl->rules[19+25].out_fuzzy_set = out_pl;
+   fl->rules[22+25].inp_fuzzy_set[0] = in_pl;
+   fl->rules[22+25].inp_fuzzy_set[1] = in_ze;
+   fl->rules[22+25].out_fuzzy_set = out_pl;
    //Rule 24
-   fl->rules[19+25].inp_fuzzy_set[0] = in_pl;
-   fl->rules[19+25].inp_fuzzy_set[1] = in_ps;
-   fl->rules[19+25].out_fuzzy_set = out_pl;
+   fl->rules[23+25].inp_fuzzy_set[0] = in_pl;
+   fl->rules[23+25].inp_fuzzy_set[1] = in_ps;
+   fl->rules[23+25].out_fuzzy_set = out_pl;
    //Rule 25
-   fl->rules[19+25].inp_fuzzy_set[0] = in_pl;
-   fl->rules[19+25].inp_fuzzy_set[1] = in_pl;
-   fl->rules[19+25].out_fuzzy_set = out_pl;
+   fl->rules[24+25].inp_fuzzy_set[0] = in_pl;
+   fl->rules[24+25].inp_fuzzy_set[1] = in_pl;
+   fl->rules[24+25].out_fuzzy_set = out_pl;
    
    
    return;
@@ -254,25 +254,24 @@ PL: Positive Large
 
 void initMembershipFunctions(fuzzy_system_rec *fl) {
 	
-   /* The X membership functions */
+   // The X membership functions
+  	fl->inp_mem_fns[in_x][in_neg] = init_trapz (0,0,-1.5,-0.5,left_trapezoid);
+   fl->inp_mem_fns[in_x][in_ze] = init_trapz (-1.5,-0.5,0.5,1.5,regular_trapezoid);
+   fl->inp_mem_fns[in_x][in_pos] = init_trapz (0.5,1.5,0,0,right_trapezoid);
+   // The X dot membership functions
+   fl->inp_mem_fns[in_x_dot][in_neg] = init_trapz (0,0,-4.0,-2.0,left_trapezoid);
+   fl->inp_mem_fns[in_x_dot][in_ze] = init_trapz (-4.0,-2.0,2.0,4.0,regular_trapezoid);
+   fl->inp_mem_fns[in_x_dot][in_pos] = init_trapz (2.0,4.0,0,0,right_trapezoid);
+   // The theta membership functions
+  	fl->inp_mem_fns[in_theta][in_neg] = init_trapz (0,0,-4.0,-2.0,left_trapezoid);
+   fl->inp_mem_fns[in_theta][in_ze] = init_trapz (-4.0,-2.0,2.0,4.0,regular_trapezoid);
+   fl->inp_mem_fns[in_theta][in_pos] = init_trapz (2.0,4.0,0,0,right_trapezoid);
+   //The theta dot membership functions
+   fl->inp_mem_fns[in_theta_dot][in_neg] = init_trapz (0,0,-4.0,-2.0,left_trapezoid);
+   fl->inp_mem_fns[in_theta_dot][in_ze] = init_trapz (-4.0,-2.0,2.0,4.0,regular_trapezoid);
+   fl->inp_mem_fns[in_theta_dot][in_pos] = init_trapz (2.0,4.0,0,0,right_trapezoid);
 
-   //Sample routines only, to give you an idea of what to do here
-  	// fl->inp_mem_fns[in_x][in_neg] = init_trapz (0,0,-1.5,-0.5,left_trapezoid);
-   //~ fl->inp_mem_fns[in_x][in_ze] = init_trapz (-1.5,-0.5,0.5,1.5,regular_trapezoid);
-   //~ fl->inp_mem_fns[in_x][in_pos] = init_trapz (0.5,1.5,0,0,right_trapezoid);
-	
-   /* The X dot membership functions */
-   //enter the appropriate membership function initialisations here 
 
-   /* The theta membership functions */
-   //enter the appropriate membership function initialisations here
-  	
-   /* The theta dot membership functions */
-   //enter the appropriate membership function initialisations here
-  	
-
-	
-	
    return;
 }
 
@@ -284,15 +283,22 @@ void initFuzzySystem (fuzzy_system_rec *fl) {
    fl->no_of_inp_regions = 5;
    fl->no_of_outputs = 9;
 	
+   //adjust
    coefficient_A=1.0;
    coefficient_B=1.0;
    coefficient_C=1.0;
    coefficient_D=1.0;
 	
-	//Sample only
-	// fl->output_values [out_nvl]=-95.0;
-	// fl->output_values [out_nl] = -85.0;
-   
+   // Output val
+   fl->output_values [out_nvl]= -100.0; //-ve v large force
+   fl->output_values [out_nl]= -75.0; //-ve large force
+   fl->output_values [out_nm]= -50.0; //-ve medium force
+   fl->output_values [out_ns]= -25.0; //-ve small force
+   fl->output_values [out_ze]= 0.0; //zero force, so on...
+   fl->output_values [out_ps]= 25.0;
+   fl->output_values [out_pm]= 50.0;
+   fl->output_values [out_pl]= 75.0;
+   fl->output_values [out_pvl]= 100.0;
 
    fl->rules = (rule *) malloc ((size_t)(fl->no_of_rules*sizeof(rule)));
    initFuzzyRules(fl);
