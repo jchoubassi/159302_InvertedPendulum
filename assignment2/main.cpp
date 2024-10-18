@@ -142,7 +142,7 @@ void initPendulumWorld(){
     
   
     worldBoundary.x1 = -2.4;
-    //worldBoundary.y1 = 1.2;
+    worldBoundary.y1 = 1.2;
 	worldBoundary.y1 = 3;
     worldBoundary.x2 = 2.4;
     worldBoundary.y2 = -0.4;
@@ -271,10 +271,6 @@ void displayInfo(const WorldStateType& s, const string msg="", const string time
 
 }
 
-
-
-
-
 void runInvertedPendulum(){
 	
 	using std::chrono::system_clock;	
@@ -286,7 +282,6 @@ void runInvertedPendulum(){
 	static bool page;
 
 	float inputs[2];  //Yamakawa
-
 
 	float const h = 0.002; //time increment
 
@@ -322,23 +317,16 @@ void runInvertedPendulum(){
     bool quit = false;
 
         while(!quit){
-    
-            
             prevState.init();
         	prevState.x = 1.0;
-
 		    cout << "Enter initial angle [-60, 60], (to exit, leave it blank): ";
-		    
-
 		    input_angle=-90;
-
 		    std::string input;
 		    std::getline( std::cin, input );
 		    if ( !input.empty() ) {
 		        std::istringstream stream( input );
 		        stream >> input_angle;
 		    }
-		    
 
 		    if( (input_angle < -60) || (input_angle > 60) ){
 		    	quit = true;
@@ -349,7 +337,6 @@ void runInvertedPendulum(){
 		    } else {
 		    	input_angle = input_angle * (3.14/180);
 		    }
-
 
 		    prevState.angle = input_angle; //user input
 
@@ -645,7 +632,7 @@ void generateControlSurface_Angle_vs_Angle_Dot(){
 			 newState.x_dot = prevState.x_dot + (h * newState.x_double_dot);
 	         newState.x = prevState.x + (h * newState.x_dot);
 
-	//Update previous state
+			//Update previous state
 			 prevState.x = newState.x;		
 	 		 prevState.angle = newState.angle;
 			 prevState.x_dot = newState.x_dot;
